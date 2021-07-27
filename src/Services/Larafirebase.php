@@ -19,6 +19,10 @@ class Larafirebase
 
     private $priority = self::PRIORITY_NORMAL;
 
+    private $data;
+
+    private $channel;
+
     private $fromArray;
 
     private $fromRaw;
@@ -60,6 +64,20 @@ class Larafirebase
         return $this;
     }
 
+    public function withData($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    public function withChannel($channel)
+    {
+        $this->channel = $channel;
+        return $this;
+    }
+
+
+
     public function fromArray($fromArray)
     {
         $this->fromArray = $fromArray;
@@ -74,7 +92,7 @@ class Larafirebase
         return $this;
     }
 
-    public function sendNotification($tokens)
+   public function sendNotification($tokens)
     {
         $fields = array(
             'registration_ids' => $this->validateToken($tokens),
@@ -82,8 +100,10 @@ class Larafirebase
                 'title' => $this->title,
                 'body' => $this->body,
                 'image' => $this->image,
-                'click_action' => $this->clickAction
+                'click_action' => $this->clickAction,
+                'android_channel_id' => $this->channel
             ],
+            'data' => $this->data,
             'priority' => $this->priority
         );
 
@@ -97,7 +117,8 @@ class Larafirebase
             'data' => ($this->fromArray) ? $this->fromArray : [
                 'title' => $this->title,
                 'body' => $this->body,
-                'image' => $this->image
+                'image' => $this->image,
+                'android_channel_id' => $this->channel
             ],
             'priority' => $this->priority
         );
